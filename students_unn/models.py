@@ -4,8 +4,11 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-
 # Create your models here.
+class UndergraduateManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(status = Student.Status.UNDERGRADUATE)
+
 class Student(models.Model):
     
     class Status(models.TextChoices):
@@ -22,7 +25,8 @@ class Student(models.Model):
     status = models.CharField(max_length=2,
                               choices=Status.choices,
                               default=Status.UNDERGRADUATE)
-    
+    undergraduate = UndergraduateManager()
+    objects = models.Manager()
     
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
